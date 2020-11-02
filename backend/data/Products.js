@@ -1,6 +1,5 @@
 const products = [
     {
-    _id: '1',
     name: 'Airpods Wireless Bluetooth Headphones',
     image: '/images/airpods.png',
     description:'Bluetooth technology lets you connect it with compatible devices wirelessly, high-quality AAC audio offers immersive listening experience built in microphone allows you to take calls while working',
@@ -12,7 +11,6 @@ const products = [
     numReviews:4,
     },
     {
-    _id: '2',
     name: 'iPhone 11 Pro 256GB Memory',
     image: '/images/phone.png',
     description:'Introducing the iPhone 11 Pro.A transformative triple-camera system that adds tons of capability without complexity.',
@@ -24,7 +22,6 @@ const products = [
     numReviews:4,
     },                                                                                                                             
     {
-            _id: '3',
             name: 'Cannon E0S 80D DSLR Camera',
             image: '/images/camera.png',
             description:'Characterized by versatile imaging specs, the Canon E0S 90D further clarifies itself using a pair of robust focusing systems and an intuitive design',
@@ -36,7 +33,6 @@ const products = [
             numReviews:3,
             },
             {
-            _id: '4',
             name: 'Sony Playstation 4 Pro White Version',
             image: '/images/playstation.png',
             description:'The ultimate home entertainment center starts with PlayStation.Whether you are into gaming, HD movies, television, music',
@@ -48,7 +44,6 @@ const products = [
             numReviews:3,
             },                                                                                                                             
             {
-                    _id: '5',
                     name: 'Apple Wireless Mouse',
                     image: '/images/mouse.png',
                     description:'Magic Mouse 2 is completely rechargeable, so you’ll eliminate the use of traditional batteries. It’s lighter, has fewer moving parts thanks to its built-in battery and and has an optimised foot design',
@@ -60,7 +55,6 @@ const products = [
                     numReviews:2,
                     },
                     {
-                    _id: '6',
                     name: 'Amazon Alexa',
                     image: '/images/alexa.png',
                     description:'Meet Echo Dot- Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space',
