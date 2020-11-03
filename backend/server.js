@@ -11,7 +11,7 @@ connectDB();
 
 app.use(notFound);
 
-app.use(errorHandler);
+//app.use(errorHandler);
 
 //Routes
 app.use('/api/products', productsRoute);
