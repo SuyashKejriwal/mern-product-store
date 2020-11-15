@@ -127,6 +127,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   // res.send('Sucess in auth')
 })
 
+
 export {
     authUser,
     registerUser,
