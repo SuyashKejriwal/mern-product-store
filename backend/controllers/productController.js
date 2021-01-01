@@ -34,6 +34,14 @@ const getProductsById =  asyncHandler(async (req,res) => {
     
 })
 
+//@desc Create new Review
+//@route POST /api/products/:id/reviews
+//@access Private
+// const getProductsById =  asyncHandler(async (req,res) => {
+//     const { rating, comment } = req.body
+
+// })
+
 export {
     getProducts,
     getProductsById

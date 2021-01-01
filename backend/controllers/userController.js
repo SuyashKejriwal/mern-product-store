@@ -127,10 +127,91 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   // res.send('Sucess in auth')
 })
 
+//@desc Get all Users
+//@route GET /api/users
+//@access PRIVATE/Admin
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({});
+    // will return all the users
+    res.json(users);
+})
+
+//@desc Delete User
+//@route DELETE /api/users/:id
+//@access PRIVATE/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    // will find the specific user
+
+    if(user){
+        await user.remove();
+        res.json({message: 'User Removed' })
+    }else{
+        const error = new Error(`User not found`);
+           res.json({
+           message: error.message,
+           stack: process.env.NODE_ENV==='production' ? null : null,
+       })
+    }
+})
+
+//@desc Get User by ID
+//@route GET /api/users/:id
+//@access PRIVATE/Admin
+const getUserById = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select('-password')
+    // will find the specific user 
+    if(user){
+        res.json(user);
+    }
+    else{
+        const error = new Error(`User not found`);
+           res.json({
+           message: error.message,
+           stack: process.env.NODE_ENV==='production' ? null : null,
+       })
+    }
+    
+})
+
+//@desc Update User 
+//@route PUT /api/users/:id
+//@access PRIVATE/ADMIN
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id)
+     //console.log(user);
+    if (user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        user.isAdmin= req.body.isAdmin // will update the isAdmin status of user
+        
+        const updatedUser = await user.save()
+       res.send(
+           {
+           _id: updatedUser._id,
+           name: updatedUser.name,
+           email: updatedUser.email,
+           isAdmin: updatedUser.isAdmin
+           }
+       )
+   } else {
+       const error = new Error(`User not found`);
+           res.json({
+           message: error.message,
+           stack: process.env.NODE_ENV==='production' ? null : null,
+       })
+   }
+
+  // res.send('Sucess in auth')
+})
 
 export {
     authUser,
     registerUser,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    getUsers,
+    deleteUser,
+    getUserById,
+    updateUser
 }

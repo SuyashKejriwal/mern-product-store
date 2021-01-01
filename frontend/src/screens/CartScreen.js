@@ -12,15 +12,21 @@ const CartScreen = ({match,location,history}) => {
     console.log(qty);
     const dispatch = useDispatch();
 
- const cart = useSelector((state) => state.cart)
+    const cart = useSelector((state) => state.cart)
     var { cartItems } = cart
     
+    // const userLogin=useSelector(state => state.userLogin)
+    // const  { userInfo }=userLogin
+
+    // const userLogout=useSelector(state => state.userLogout)
+    // const  { logout }=userLogout
+
     useEffect(() => {
         if (productId) {
             dispatch(addToCart(productId, qty))   
         }
         
-    }, [dispatch, productId, qty])
+    }, [dispatch, productId, qty,history ])
 
     const removeFromCartHandler = (id) => {
         dispatch(removeFromCart(id));

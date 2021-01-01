@@ -5,17 +5,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
-    getUserDetails,
+    getUserProfileDetails,
     updateUserProfile
 } from '../actions/userActions'
 import { myListOrder } from '../actions/orderActions'
 
-const ProfileScreen = ({ location, history }) => {
+const ProfileScreen = ({ history }) => {
 
     const dispatch = useDispatch();
 
-    const userDetails = useSelector(state => state.userDetails)
-    const { loading, error, user } = userDetails
+    const userProfileDetails = useSelector(state => state.userProfileDetails)
+    const { loading, error, user } = userProfileDetails
     
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
@@ -38,7 +38,7 @@ const ProfileScreen = ({ location, history }) => {
         }
         else {
             if (!user.name) {
-                dispatch(getUserDetails());
+                dispatch(getUserProfileDetails());
                 dispatch(myListOrder());
             }
             else {
@@ -50,7 +50,7 @@ const ProfileScreen = ({ location, history }) => {
     
     const submitHandler = (e) => {
         e.preventDefault();
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             setMessage('Passwords do not match')
         } else {
             // DISPATCH UPDATE PROFILE
