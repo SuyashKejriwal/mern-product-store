@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from  '../components/FormContainer'
-import { getUserDetails } from '../actions/userActions'
+import { getUserDetailsById } from '../actions/userActions'
 
 const UserEditScreen = ({ match }) => {
     const userId=match.params.id;
@@ -19,17 +19,19 @@ const UserEditScreen = ({ match }) => {
     const userDetails = useSelector(state => state.userDetails)
     const { loading, error, user } = userDetails
 
-    console.log(user._id);
-    console.log(user.name);
-    console.log(userId);
+    
     
     useEffect(() => {
-         //   dispatch(getUserDetails(userId));
-            setName(user.name);
-            setEmail(user.email);
-            setIsAdmin(user.isAdmin);
-        
-    },[user])
+            
+            if( user === { }|| user._id!==userId){
+                dispatch(getUserDetailsById(userId));
+            }else{
+                setName(user.name);
+                setEmail(user.email);
+                setEmail(user.isAdmin);
+            }
+            
+    },[user,userId])
     
     const submitHandler = (e) => {
         e.preventDefault();
