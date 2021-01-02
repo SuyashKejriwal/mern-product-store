@@ -17,17 +17,17 @@ const UserListScreen = ({history}) => {
     const { loading,error,users }=userList
 
     const userDelete=useSelector(state=> state.userDelete)
-    const { success: successDelete,message: deleteMessage }=userDelete
+    const { loading: loadingDelete, success: successDelete,error: errorDelete }=userDelete
 
     useEffect(() => {
         if(userInfo && userInfo.isAdmin){
             dispatch(listUsers())
         }else{
-            // will run in case of logout redirect to home page
-            history.push('/')
+            // will run in case of logout redirect to login page
+            history.push('/login')
         }
         
-    }, [dispatch,history,userInfo,successDelete,deleteMessage])
+    }, [dispatch,history,userInfo,successDelete])
 
     const deleteHandler=(id) => {
 
@@ -40,6 +40,8 @@ const UserListScreen = ({history}) => {
     return (
         <>
          <h1>Users</h1>
+         {loadingDelete && <Loader/>}
+         {errorDelete && <Message>{errorDelete}</Message>}
          {loading ?
           <Loader />:
           error ?

@@ -4,7 +4,11 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux' 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts } from '../actions/productActions'
+import { listProducts,
+         deleteProducts,
+         createProducts
+         } from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = ({history,match}) => {
     const dispatch = useDispatch();
@@ -15,21 +19,40 @@ const ProductListScreen = ({history,match}) => {
     const userLogin=useSelector(state => state.userLogin)
     const  { userInfo }=userLogin
 
+    const productDelete=useSelector(state=> state.productDelete)
+    const { loading:loadingDelete, 
+            success: successDelete,
+            error: errorDelete }=productDelete
+
+    const productCreate=useSelector(state=> state.productCreate)
+    const { loading:loadingCreate,
+            success: successCreate,
+            error: errorCreate,
+            product: createdProduct }=productCreate
+
     useEffect(() => {
-        if(userInfo && userInfo.isAdmin){
-            dispatch(listProducts())
+        dispatch({type: PRODUCT_CREATE_RESET })
+        if(!userInfo.isAdmin){
+            // will run in case of logout redirect to login page
+            history.push('/login')   
+        }
+
+        if(successCreate){
+            // will run if product is successfully created
+            // redirect to product edit screen
+            history.push(`/admin/product/${createdProduct._id}/edit`)
+
         }else{
-            // will run in case of logout redirect to home page
-            history.push('/')
+            dispatch(listProducts());
         }
         
-    }, [dispatch,history,userInfo])
+    }, [dispatch,history,userInfo,successDelete,successCreate,createdProduct])
 
     const deleteHandler=(id) => {
 
         if(window.confirm('Are you sure you want to delete this Product')){
             // DELETE PRODUCTS
-            //dispatch(deleteProduct(id));
+            dispatch(deleteProducts(id));
         }
        
     }
@@ -50,6 +73,8 @@ const ProductListScreen = ({history,match}) => {
                 </Button>
             </Col>
         </Row>
+        {loadingDelete && <Loader/>}
+        {errorDelete && <Message variant='danger' >{errorDelete}</Message>}
          {loading ?
           <Loader />:
           error ?
