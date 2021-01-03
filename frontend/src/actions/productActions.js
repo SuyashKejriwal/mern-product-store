@@ -10,7 +10,10 @@ import {
     PRODUCT_DELETE_FAIL,
     PRODUCT_CREATE_REQUEST,
     PRODUCT_CREATE_SUCCESS,
-    PRODUCT_CREATE_FAIL
+    PRODUCT_CREATE_FAIL,
+    PRODUCT_UPDATE_REQUEST,
+    PRODUCT_UPDATE_SUCCESS,
+    PRODUCT_UPDATE_FAIL
 } from '../constants/productConstants.js';
 import axios from 'axios'
 
@@ -78,7 +81,7 @@ export const deleteProducts = (id) => async (dispatch, getState) => {
     }
 }
 
-export const createProducts=(product) => async(dispatch,getState) => {
+export const createProduct=(product) => async(dispatch,getState) => {
  try{
     dispatch({PRODUCT_CREATE_REQUEST})
 
@@ -104,5 +107,32 @@ export const createProducts=(product) => async(dispatch,getState) => {
         error:'Sorry some error occured! Product could not be created'
     })
  }
-
 }
+
+export const updateProducts=(product) => async(dispatch,getState) => {
+    try{
+       dispatch({PRODUCT_UPDATE_REQUEST})
+   
+       const { userLogin: { userInfo } } = getState();
+   
+       const config = {
+               headers: {
+                   'Content-Type': 'application/json',
+                   Authorization: `Bearer ${userInfo.token}`
+               },
+       }
+   
+       await axios.put(`/api/products/${product.id}`,{product},config)
+   
+       dispatch({
+           type: PRODUCT_UPDATE_SUCCESS
+       })
+   
+    }catch(error){
+       dispatch({
+           type: PRODUCT_UPDATE_FAIL,
+           error:'Sorry some error occured! Product could not be updated'
+       })
+    }
+   
+   }
