@@ -8,7 +8,6 @@ import FormContainer from  '../components/FormContainer'
 import { getUserDetailsById,
          updateUser
          } from '../actions/userActions'
-import {    USER_UPDATE_RESET } from '../constants/userConstants'
 
 const UserEditScreen = ({history, match }) => {
     const userId=match.params.id;
@@ -32,7 +31,7 @@ const UserEditScreen = ({history, match }) => {
     useEffect(() => {
            // console.log('in the effect');
            if(successUpdate){
-               dispatch({type: USER_UPDATE_RESET });
+              // dispatch({type: USER_UPDATE_RESET });
                history.push('/admin/userlist')
            }else{
             if( user === undefined || user._id!==userId){

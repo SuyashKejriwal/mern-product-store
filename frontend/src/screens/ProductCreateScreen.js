@@ -6,8 +6,9 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { createProduct } from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
-const ProductCreateScreen = () => {
+const ProductCreateScreen = ({history}) => {
 
     const [name,setName]=useState('');
     const [price,setPrice]=useState(0);
@@ -20,14 +21,27 @@ const ProductCreateScreen = () => {
 
     const dispatch = useDispatch();
 
+    const userLogin=useSelector(state => state.userLogin)
+    const  { userInfo }=userLogin
+
     const productCreate=useSelector((state) => state.productCreate)
-    const { loading: loadingCreate, 
+    const { loading: loadingCreate,
+            success: successCreate, 
             error: errorCreate, 
             product }= productCreate
 
     useEffect(() => {
-
-    }, [])
+        if(!userInfo.isAdmin){
+            // will run in case of logout redirect to login page
+            history.push('/login')   
+        }else{
+            if(successCreate){
+                dispatch({type: PRODUCT_CREATE_RESET })
+                history.push(`/admin/productlist`);
+             }
+        }
+     
+    }, [dispatch,successCreate,userInfo])
 
     const uploadFileHandler=() => {
 
@@ -54,6 +68,8 @@ const ProductCreateScreen = () => {
           </Link>
           <FormContainer>
               <h1>Create Product</h1>
+              {loadingCreate && <Loader />}
+              {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
               <Form onSubmit={submitHandler}>
               <Form.Group controlId='name'>
               <Form.Label>Name</Form.Label>

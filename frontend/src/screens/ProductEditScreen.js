@@ -6,8 +6,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductsDetails,
-         productUpdate } from '../actions/productActions'
-
+         updateProducts } from '../actions/productActions'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = ({match,history}) => {
     const productId=match.params.id;
@@ -19,20 +19,21 @@ const ProductEditScreen = ({match,history}) => {
     const [category,setCategory]=useState('');
     const [countInStock,setCountInStock]=useState(0);
     const [description,setDescription]=useState('');
-    const [uploading,setuploading]=useState(false);
+    const [uploading,setUploading]=useState(false);
 
     const dispatch=useDispatch();
 
     const productDetails = useSelector((state) => state.productDetails)
     const { loading, error, product } = productDetails
 
-    const productUpdate=useSelector((state) => productUpdate)
+    const productUpdate=useSelector((state) => state.productUpdate)
     const {loading:loadingUpdate,
            success: successUpdate,
            error: errorUpdate } = productUpdate;
     
     useEffect(() => {
     if(successUpdate){
+        dispatch({type: PRODUCT_UPDATE_RESET });
         history.push(`/admin/productlist`);
     }else{
         if(product===undefined || product._id!==productId ){
@@ -64,8 +65,8 @@ const ProductEditScreen = ({match,history}) => {
            countInStock,
            description
        }
-
-       dispatch(productUpdate(updatedProduct));
+       console.log(updatedProduct);
+       dispatch(updateProducts(updatedProduct));
     }
 
     return (
@@ -160,7 +161,7 @@ const ProductEditScreen = ({match,history}) => {
             </Form.Group>
 
             <Button type='submit' variant='primary'>
-              Update
+              Save Changes
             </Button>
                     </Form>)
               }

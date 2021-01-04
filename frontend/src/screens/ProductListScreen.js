@@ -7,7 +7,6 @@ import Loader from '../components/Loader'
 import { listProducts,
          deleteProducts
          } from '../actions/productActions'
-import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 
 const ProductListScreen = ({history,match}) => {
     const dispatch = useDispatch();
@@ -23,29 +22,16 @@ const ProductListScreen = ({history,match}) => {
             success: successDelete,
             error: errorDelete }=productDelete
 
-    const productCreate=useSelector(state=> state.productCreate)
-    const { loading:loadingCreate,
-            success: successCreate,
-            error: errorCreate,
-            product: createdProduct }=productCreate
-
     useEffect(() => {
-        dispatch({type: PRODUCT_CREATE_RESET })
         if(!userInfo.isAdmin){
             // will run in case of logout redirect to login page
             history.push('/login')   
-        }
-
-        if(successCreate){
-            // will run if product is successfully created
-            // redirect to product edit screen
-            history.push(`/admin/product/${createdProduct._id}/edit`)
-
         }else{
-            dispatch(listProducts());
+            dispatch(listProducts())
         }
+
         
-    }, [dispatch,history,userInfo,successDelete,successCreate,createdProduct])
+    }, [dispatch,history,userInfo,successDelete])
 
     const deleteHandler=(id) => {
 

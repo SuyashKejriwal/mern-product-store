@@ -15,18 +15,18 @@ const CartScreen = ({match,location,history}) => {
     const cart = useSelector((state) => state.cart)
     var { cartItems } = cart
     
-    // const userLogin=useSelector(state => state.userLogin)
-    // const  { userInfo }=userLogin
+     const userLogout=useSelector(state => state.userLogout)
+     const  { logout }=userLogout
 
     // const userLogout=useSelector(state => state.userLogout)
     // const  { logout }=userLogout
 
     useEffect(() => {
-        if (productId) {
+         if (productId) {
             dispatch(addToCart(productId, qty))   
         }
         
-    }, [dispatch, productId, qty,history ])
+    }, [dispatch, productId, qty,history,logout])
 
     const removeFromCartHandler = (id) => {
         dispatch(removeFromCart(id));

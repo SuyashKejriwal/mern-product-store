@@ -4,7 +4,8 @@ import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux' 
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listUsers,deleteUser } from '../actions/userActions'
+import { listUsers,deleteUser,logout } from '../actions/userActions'
+import { USER_UPDATE_RESET } from '../constants/userConstants'
 
 const UserListScreen = ({history}) => {
     const dispatch = useDispatch();
@@ -17,11 +18,25 @@ const UserListScreen = ({history}) => {
     const { loading,error,users }=userList
 
     const userDelete=useSelector(state=> state.userDelete)
-    const { loading: loadingDelete, success: successDelete,error: errorDelete }=userDelete
+    const { loading: loadingDelete, 
+            success: successDelete,
+            error: errorDelete }=userDelete
+
+    const userUpdate=useSelector(state=> state.userUpdate)
+    const { success:successUpdate,
+            user:updatedUser }=userUpdate
 
     useEffect(() => {
+        
         if(userInfo && userInfo.isAdmin){
-            dispatch(listUsers())
+            if(successUpdate && updatedUser.name===userInfo.name && !updatedUser.isAdmin){
+                // will run if admin demotes itself to user.
+                // it should first logout and then load login page.
+                dispatch(logout());
+            }else{
+            dispatch({type: USER_UPDATE_RESET });
+            dispatch(listUsers());
+            }
         }else{
             // will run in case of logout redirect to login page
             history.push('/login')

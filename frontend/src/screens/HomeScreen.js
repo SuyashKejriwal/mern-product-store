@@ -11,6 +11,9 @@ const HomeScreen = () => {
     
     const productList = useSelector(state => state.productList)
     const { loading, error,products } = productList
+
+    const userLogout=useSelector(state => state.userLogout)
+    const { logout }= userLogout
     useEffect(() => {
           dispatch(listProducts())
     }, [dispatch])

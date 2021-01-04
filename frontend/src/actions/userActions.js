@@ -23,6 +23,7 @@ import {
     USER_DETAILS_REQUEST,
     USER_DETAILS_SUCCESS,
     USER_DETAILS_FAIL,
+    USER_DETAILS_RESET,
     USER_UPDATE_REQUEST,
     USER_UPDATE_FAIL,
     USER_UPDATE_SUCCESS
@@ -328,13 +329,11 @@ export const updateUser= (user) => async(dispatch,getState )=> {
         const { data }= await axios.put(`/api/users/${user._id}`,user, config);
 
             dispatch({
-                type: USER_UPDATE_SUCCESS
+                type: USER_UPDATE_SUCCESS, payload: data
             })
+            dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
 
-            dispatch({
-                type: USER_DETAILS_SUCCESS,
-                payload:data,
-            })
+            dispatch({ type: USER_DETAILS_RESET })
         
     }
     catch (error) {
