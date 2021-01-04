@@ -34,15 +34,15 @@ const UserListScreen = ({history}) => {
                 // it should first logout and then load login page.
                 dispatch(logout());
             }else{
-            dispatch({type: USER_UPDATE_RESET });
             dispatch(listUsers());
+           dispatch({type: USER_UPDATE_RESET });
             }
         }else{
             // will run in case of logout redirect to login page
             history.push('/login')
         }
         
-    }, [dispatch,history,userInfo,successDelete])
+    }, [dispatch,history,userInfo,successDelete,successUpdate])
 
     const deleteHandler=(id) => {
 

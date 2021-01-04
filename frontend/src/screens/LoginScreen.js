@@ -6,7 +6,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from  '../components/FormContainer'
 import { login } from '../actions/userActions'
-import { USER_LOGOUT_RESET } from '../constants/userConstants'
+
 const LoginScreen = ({location, history}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

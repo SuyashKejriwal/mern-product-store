@@ -6,7 +6,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductsDetails,
-         updateProducts } from '../actions/productActions'
+         updateProduct } from '../actions/productActions'
+import { logout } from '../actions/userActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = ({match,history}) => {
@@ -26,13 +27,22 @@ const ProductEditScreen = ({match,history}) => {
     const productDetails = useSelector((state) => state.productDetails)
     const { loading, error, product } = productDetails
 
+    const userLogin=useSelector(state => state.userLogin)
+    const  { userInfo }=userLogin
+
     const productUpdate=useSelector((state) => state.productUpdate)
     const {loading:loadingUpdate,
            success: successUpdate,
+           product:newProduct,
            error: errorUpdate } = productUpdate;
     
     useEffect(() => {
-    if(successUpdate){
+    if(userInfo===undefined || !userInfo.isAdmin){
+      // if logged in user is not admin.
+      dispatch(logout());
+    }else {
+      // logged in user is admin
+      if(successUpdate){
         dispatch({type: PRODUCT_UPDATE_RESET });
         history.push(`/admin/productlist`);
     }else{
@@ -48,15 +58,17 @@ const ProductEditScreen = ({match,history}) => {
                setDescription(product.description);
            }
     }
-    
+    }
     },[dispatch,productId,product,successUpdate,history])
 
     const uploadFileHandler= () => {
         
     }
 
-    const submitHandler=() => {
+    const submitHandler= (e) => {
+       e.preventDefault();
        const updatedProduct={
+         _id:productId,
            name,
            price,
            image,
@@ -66,7 +78,7 @@ const ProductEditScreen = ({match,history}) => {
            description
        }
        console.log(updatedProduct);
-       dispatch(updateProducts(updatedProduct));
+       dispatch(updateProduct(updatedProduct));
     }
 
     return (

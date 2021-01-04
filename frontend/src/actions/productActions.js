@@ -83,7 +83,7 @@ export const deleteProducts = (id) => async (dispatch, getState) => {
 
 export const createProduct=(product) => async(dispatch,getState) => {
  try{
-    dispatch({PRODUCT_CREATE_REQUEST})
+    dispatch({type: PRODUCT_CREATE_REQUEST })
 
     const { userLogin: { userInfo } } = getState();
 
@@ -109,9 +109,11 @@ export const createProduct=(product) => async(dispatch,getState) => {
  }
 }
 
-export const updateProducts=(product) => async(dispatch,getState) => {
+export const updateProduct= (product) => async (dispatch, getState) => {
+    //console.log('Before try catch block in updateProducts action');
     try{
-       dispatch({PRODUCT_UPDATE_REQUEST})
+       dispatch({type: PRODUCT_UPDATE_REQUEST })
+      // console.log('IN the updateProducts action after request state.');
    
        const { userLogin: { userInfo } } = getState();
    
@@ -122,11 +124,14 @@ export const updateProducts=(product) => async(dispatch,getState) => {
                },
        }
    
-       await axios.put(`/api/products/${product.id}`,{product},config)
+      const {data}= await axios.put(`/api/products/${product._id}`,product,config)
    
        dispatch({
-           type: PRODUCT_UPDATE_SUCCESS
+           type: PRODUCT_UPDATE_SUCCESS,
+           payload: data
        })
+
+       dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data })
    
     }catch(error){
        dispatch({

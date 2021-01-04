@@ -143,7 +143,7 @@ export const userDetailsReducer=(state={ user: {} },action )=> {
     }
 }
 
-export const userUpdateReducer=( state = { },action) => {
+export const userUpdateReducer=( state = { user: {},success:false },action) => {
     switch(action.type){
         case USER_UPDATE_REQUEST:
             return {loading: true}
