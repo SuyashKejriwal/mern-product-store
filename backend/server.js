@@ -1,9 +1,11 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
+import path from 'path'
 import productsRoute from './routes/products.js'
 import usersRoute from './routes/users.js'
 import ordersRoute from './routes/orders.js'
+import uploadRoute from './routes/uploadRoutes.js'
 import connectDB from './config/db.js'
 import {notFound,errorHandler} from './middleware/errorMiddleware.js'
 const app = express();
@@ -26,6 +28,7 @@ app.use(errorHandler);
 app.use('/api/products', productsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/orders', ordersRoute);
+app.use('/api/upload', uploadRoute);
 
 // Paypal Config Routes
 // console.log(process.env.PAYPAL_CLIENT_ID);
@@ -34,6 +37,8 @@ app.get('/api/config/paypal', (req, res) =>
     res.send(process.env.PAYPAL_CLIENT_ID)
 )
 
+const __dirname=path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 const PORT = process.env.PORT||5000;
 
