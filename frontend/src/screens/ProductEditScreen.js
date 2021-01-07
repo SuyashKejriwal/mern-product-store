@@ -1,4 +1,5 @@
 import React, {useState,useEffect } from 'react'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,7 +34,6 @@ const ProductEditScreen = ({match,history}) => {
     const productUpdate=useSelector((state) => state.productUpdate)
     const {loading:loadingUpdate,
            success: successUpdate,
-           product:newProduct,
            error: errorUpdate } = productUpdate;
     
     useEffect(() => {
@@ -61,9 +61,6 @@ const ProductEditScreen = ({match,history}) => {
     }
     },[dispatch,productId,product,successUpdate,history])
 
-    const uploadFileHandler= () => {
-        
-    }
 
     const submitHandler= (e) => {
        e.preventDefault();
@@ -79,6 +76,31 @@ const ProductEditScreen = ({match,history}) => {
        }
        console.log(updatedProduct);
        dispatch(updateProduct(updatedProduct));
+    }
+
+    const uploadFileHandler = async (e)=> {
+      const file=e.target.files[0]
+      console.log(uploading);
+      const formData=new FormData()
+      formData.append('image',file)
+      setUploading(true)
+      console.log(uploading);
+      try{
+        const config={
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+
+      const { data }= await axios.post('/api/upload',formData,config)
+
+      setImage(data)
+      setUploading(false)
+      }catch(error){
+        console.log(error);
+        setUploading(false);
+      }
+
     }
 
     return (

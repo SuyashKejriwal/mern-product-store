@@ -1,4 +1,5 @@
 import React,{ useState,useEffect } from 'react'
+import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,6 +7,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { createProduct } from '../actions/productActions'
+import { logout } from '../actions/userActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductCreateScreen = ({history}) => {
@@ -17,7 +19,7 @@ const ProductCreateScreen = ({history}) => {
     const [category,setCategory]=useState('');
     const [countInStock,setCountInStock]=useState(0);
     const [description,setDescription]=useState('');
-    const [uploading,setuploading]=useState(false);
+    const [uploading,setUploading]=useState(false);
 
     const dispatch = useDispatch();
 
@@ -31,9 +33,9 @@ const ProductCreateScreen = ({history}) => {
             product }= productCreate
 
     useEffect(() => {
-        if(!userInfo.isAdmin){
+        if(userInfo===undefined || !userInfo.isAdmin){
             // will run in case of logout redirect to login page
-            history.push('/login')   
+            dispatch(logout()); 
         }else{
             if(successCreate){
                 dispatch({type: PRODUCT_CREATE_RESET })
@@ -43,7 +45,28 @@ const ProductCreateScreen = ({history}) => {
      
     }, [dispatch,successCreate,userInfo])
 
-    const uploadFileHandler=() => {
+    const uploadFileHandler = async (e)=> {
+      const file=e.target.files[0]
+      console.log(uploading);
+      const formData=new FormData()
+      formData.append('image',file)
+      setUploading(true)
+      console.log(uploading);
+      try{
+        const config={
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+
+      const { data }= await axios.post('/api/upload',formData,config)
+
+      setImage(data)
+      setUploading(false)
+      }catch(error){
+        console.log(error);
+        setUploading(false);
+      }
 
     }
 
@@ -94,6 +117,7 @@ const ProductCreateScreen = ({history}) => {
               <Form.Control
                 type='text'
                 placeholder='Enter image url'
+                value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.File
