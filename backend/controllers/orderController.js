@@ -69,13 +69,7 @@ const updateOrderToPaid =  asyncHandler(async (req,res) => {
     if (order) {
         order.isPaid = true;
         order.paidAt = Date.now();
-        order.paymentResult = {
-            id: req.body.id,
-            status: req.body.status,
-            update_time: req.body.update_time,
-            email_address: req.body.payer.email_address,
-        }
-
+        
         const updatedOrder = await order.save();
 
 
@@ -109,9 +103,27 @@ const getMyOrders =  asyncHandler(async (req,res) => {
 })
 
 
+//@desc Get all orders
+//@route GET /api/orders
+//@access Private/Admin
+const getOrders =  asyncHandler(async (req,res) => {
+    const orders = await Order.find({}).populate('user','id name');
+    if (orders) {
+        res.json(orders);
+    }
+    else {
+        const error = new Error(`No order till now`);
+            res.json({
+            message: error.message,
+            stack: process.env.NODE_ENV==='production' ? null : null,
+        })
+    }
+})
+
 export {
     addOrderItems,
     getOrderById,
     updateOrderToPaid,
-    getMyOrders
+    getMyOrders,
+    getOrders
 }

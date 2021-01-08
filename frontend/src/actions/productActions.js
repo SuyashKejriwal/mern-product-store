@@ -83,6 +83,7 @@ export const deleteProducts = (id) => async (dispatch, getState) => {
 
 export const createProduct=(product) => async(dispatch,getState) => {
  try{
+     console.log('Entered into createProductAction');
     dispatch({type: PRODUCT_CREATE_REQUEST })
 
     const { userLogin: { userInfo } } = getState();
@@ -94,7 +95,8 @@ export const createProduct=(product) => async(dispatch,getState) => {
             },
     }
 
-    const { data }= await axios.post(`/api/products`,{product},config)
+    const { data }= await axios.post(`/api/products`,product,config)
+    console.log(data);
 
     dispatch({
         type: PRODUCT_CREATE_SUCCESS,

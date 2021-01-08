@@ -8,7 +8,6 @@ import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductsDetails,
          updateProduct } from '../actions/productActions'
-import { logout } from '../actions/userActions'
 import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 const ProductEditScreen = ({match,history}) => {
@@ -37,9 +36,9 @@ const ProductEditScreen = ({match,history}) => {
            error: errorUpdate } = productUpdate;
     
     useEffect(() => {
-    if(userInfo===undefined || !userInfo.isAdmin){
-      // if logged in user is not admin.
-      dispatch(logout());
+    if(userInfo===undefined ||!userInfo.isAdmin){
+      // if logged in user is not admin then push to login page.
+     history.push('/login')
     }else {
       // logged in user is admin
       if(successUpdate){

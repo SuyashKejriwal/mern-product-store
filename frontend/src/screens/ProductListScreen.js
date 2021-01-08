@@ -8,7 +8,7 @@ import { listProducts,
          deleteProducts
          } from '../actions/productActions'
 
-const ProductListScreen = ({history,match}) => {
+const ProductListScreen = ({history}) => {
     const dispatch = useDispatch();
 
     const productList=useSelector(state => state.productList)
@@ -23,7 +23,8 @@ const ProductListScreen = ({history,match}) => {
             error: errorDelete }=productDelete
 
     useEffect(() => {
-        if(!userInfo.isAdmin){
+        console.log(userInfo);
+        if(userInfo===undefined||!userInfo.isAdmin){
             // will run in case of logout redirect to login page
             history.push('/login')   
         }else{

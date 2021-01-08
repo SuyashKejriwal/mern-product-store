@@ -7,7 +7,6 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { createProduct } from '../actions/productActions'
-import { logout } from '../actions/userActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductCreateScreen = ({history}) => {
@@ -30,20 +29,21 @@ const ProductCreateScreen = ({history}) => {
     const { loading: loadingCreate,
             success: successCreate, 
             error: errorCreate, 
-            product }= productCreate
+             }= productCreate
 
     useEffect(() => {
+        console.log(successCreate);
         if(userInfo===undefined || !userInfo.isAdmin){
-            // will run in case of logout redirect to login page
-            dispatch(logout()); 
-        }else{
-            if(successCreate){
-                dispatch({type: PRODUCT_CREATE_RESET })
-                history.push(`/admin/productlist`);
-             }
-        }
-     
-    }, [dispatch,successCreate,userInfo])
+          // will run in case of logout redirect to login page
+          history.push('/login');
+       }else{
+        if(successCreate){
+          dispatch({type: PRODUCT_CREATE_RESET })
+          history.push(`/admin/productlist`);
+       }
+       }
+      
+    } , [history,dispatch,successCreate,userInfo])
 
     const uploadFileHandler = async (e)=> {
       const file=e.target.files[0]
@@ -70,7 +70,8 @@ const ProductCreateScreen = ({history}) => {
 
     }
 
-    const submitHandler=() => {
+    const submitHandler=(e) => {
+      e.preventDefault();
       const newproduct={
           name,
           price,
@@ -80,7 +81,7 @@ const ProductCreateScreen = ({history}) => {
           countInStock,
           description
       }
-
+      console.log(newproduct);
       dispatch(createProduct(newproduct));
     }
 

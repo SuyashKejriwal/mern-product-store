@@ -59,8 +59,24 @@ const deleteProductById=asyncHandler( async(req,res)  => {
 //@access Private/Admin
 const createProduct= asyncHandler(async(req,res) => {
 
-    const { product }= req.body;
+    const { name,
+        price,
+        description,
+        image,
+        brand,
+        category,
+        countInStock }= req.body;
 
+    const product={
+        name,
+        price,
+        description,
+        image,
+        brand,
+        category,
+        countInStock
+    }
+    console.log(product);
     const productObject = await Product.create(product);
 
     if(productObject){
