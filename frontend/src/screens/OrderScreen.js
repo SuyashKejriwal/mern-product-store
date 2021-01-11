@@ -13,6 +13,9 @@ const OrderScreen = ({ match }) => {
 
     const [sdkReady, setSdkReady] = useState(false)
     const dispatch = useDispatch();
+
+    const userLogin=useSelector(state => state.userLogin)
+    const  { userInfo }=userLogin
     
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, loading, error } = orderDetails
@@ -49,10 +52,10 @@ const OrderScreen = ({ match }) => {
             document.body.appendChild(script)
         }
 
-        if (!order || successPay ) {
+        if (!order || successPay || order._id !== orderId ) {
             dispatch({ type: ORDER_PAY_RESET})
             dispatch(getOrderDetails(orderId))
-          } else if (!order.isPaid) {
+          } else if (!order.isPaid ) {
             if (!window.paypal) {
               addPayPalScript()
             } else {

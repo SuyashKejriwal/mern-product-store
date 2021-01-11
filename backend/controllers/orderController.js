@@ -84,7 +84,32 @@ const updateOrderToPaid =  asyncHandler(async (req,res) => {
     }
 })
 
-//@desc Get logged in user orders
+//@desc Update Order to Delivered
+//@route PUT /api/orders/:id/deliver
+//@access Private/Admin
+const updateOrderToDeliver =  asyncHandler(async (req,res) => {
+    const order = await Order.findById(req.params.id);
+    if(order){
+        if (order.isPaid) {
+            order.isDelivered = true;
+            order.deliveredAt = Date.now();
+            
+            const updatedOrder = await order.save();
+
+            res.json(updatedOrder);
+        }
+    }
+    
+    else {
+        const error = new Error(`Order not found`);
+            res.json({
+            message: error.message,
+            stack: process.env.NODE_ENV==='production' ? null : null,
+        })
+    }
+})
+
+//@desc Get logged in user orders 
 //@route GET /api/orders/myorders
 //@access Private
 const getMyOrders =  asyncHandler(async (req,res) => {
@@ -103,11 +128,11 @@ const getMyOrders =  asyncHandler(async (req,res) => {
 })
 
 
-//@desc Get all orders
+//@desc Get all orders which are paid
 //@route GET /api/orders
 //@access Private/Admin
 const getOrders =  asyncHandler(async (req,res) => {
-    const orders = await Order.find({}).populate('user','id name');
+    const orders = await Order.find({ isPaid: true }).populate('user','id name');
     if (orders) {
         res.json(orders);
     }
@@ -124,6 +149,7 @@ export {
     addOrderItems,
     getOrderById,
     updateOrderToPaid,
+    updateOrderToDeliver,
     getMyOrders,
     getOrders
 }
