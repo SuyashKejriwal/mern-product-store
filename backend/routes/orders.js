@@ -20,6 +20,6 @@ router.get('/:id', protect, getOrderById);
 
 router.put('/:id/pay', protect, updateOrderToPaid);
 
-router.put('/:id/deliver',protect, admin, updateOrderToDeliver);
+router.put('/:id/deliver', updateOrderToDeliver);
 
 export default router;

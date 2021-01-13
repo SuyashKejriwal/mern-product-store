@@ -147,6 +147,7 @@ export const myListOrder = () => async (dispatch, getState) => {
                 Authorization: `Bearer ${userInfo.token}`
             },
         }
+        
 
         const { data } = await axios.get(
             `/api/orders/myorders`,
@@ -217,16 +218,18 @@ export const deliverOrder=(order)=> async (dispatch, getState) => {
 
         const config = {
             headers: {
-                'Content-Type': 'application/json',
                 Authorization: `Bearer ${userInfo.token}`
-            },
+            }
         }
 
-        const { data } = await axios.put(`/api/orders/${order._id}/deliver`,config)
+        console.log(config);
 
+        const {data}=await axios.put(
+            `/api/orders/${order._id}/deliver`, 
+            config )
+        console.log(data);
         dispatch({
             type: ORDER_DELIVER_SUCCESS,
-            payload: data,
         })
         
     }catch (error) {
