@@ -6,7 +6,9 @@ import Message from '../components/Message'
 import { Row, Col } from 'react-bootstrap'
 import { listProducts } from '../actions/productActions'
 
-const HomeScreen = () => {
+const HomeScreen = ({match}) => {
+    const keyword=match.params.keyword;
+
     const dispatch = useDispatch()
     
     const productList = useSelector(state => state.productList)
@@ -15,7 +17,7 @@ const HomeScreen = () => {
     const userLogout=useSelector(state => state.userLogout)
     const { logout }= userLogout
     useEffect(() => {
-          dispatch(listProducts())
+          dispatch(listProducts(keyword))
     }, [dispatch])
 
     return ( 
