@@ -5,6 +5,7 @@ import { Row, Col, ListGroup, Card, Image, Button,Form } from 'react-bootstrap'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Rating from '../components/Rating'
+import Meta from '../components/Meta'
 import { listProductsDetails,
          createProductReview
         } from '../actions/productActions'
@@ -66,6 +67,7 @@ const ProductScreen = ({ history,match }) => {
                 error ? 
                     (<Message variant='danger' children={error}></Message>) :(
                     <>
+                    <Meta title={product.name}/>
                     <Row>
                 <Col md={6}>
                     <Image src={product.image} style={{ width: 400, height: 400, }}
